@@ -5,12 +5,12 @@ import (
 	"net/http"
 )
 
-var Localhost string = "http://localhost:"
-var Port string = "21337"
+var localhost string = "http://localhost:"
+var port string = "21337"
 
 // GET http://localhost:{port}/static-decklist
-func QueryClient(request string) (string, error) {
-	resp, err := http.Get(Localhost + Port + "/" + request)
+func queryClient(request string) (string, error) {
+	resp, err := http.Get(localhost + port + "/" + request)
 
 	if err != nil {
 		return "", err
@@ -21,8 +21,8 @@ func QueryClient(request string) (string, error) {
 	return string(data), err
 }
 
-func GetDeck() (string, error) {
-	data, err := QueryClient("static-decklist")
+func getDeck() (string, error) {
+	data, err := queryClient("static-decklist")
 
 	if err != nil {
 		return "", err

@@ -36,6 +36,7 @@ func main() {
 		fmt.Println(library[i])
 	}
 
+	getField()
 	// // Code tested and working with actual client
 	// data, err := GetDeck()
 
@@ -83,7 +84,3 @@ func populateCardLibrary() (map[string]card, error) {
 
 	return cardsMap, error
 }
-
-// func findCardByID(string) (card, error) {
-
-// }
