@@ -24,15 +24,17 @@ type card struct {
 }
 
 func main() {
-	deckList := parseDeck("{\"DeckCode\":\"CEAAEBYBAEDRMGREFYZDKCABAABQMCYSCQNB2JYCAQAQABYMFIWAMAIBBEKCAIRHFE\",\"CardsInDeck\":{\"00IO004\":1,\"00IO015\":1,\"00IO008\":1,\"00IO006\":1,\"00IO010\":1,\"00IO014\":1,\"00IO012T2\":1,\"00IO005\":1,\"00IO016\":1}}")
+	deckList := parseDeck("{\"DeckCode\":\"CEAAEBYBAEDRMGREFYZDKCABAABQMCYSCQNB2JYCAQAQABYMFIWAMAIBBEKCAIRHFE\",\"CardsInDeck\":{\"01IO004\":1,\"01IO015\":1,\"01IO008\":1,\"01IO006\":1,\"01IO010\":1,\"01IO014\":1,\"01IO012T2\":1,\"01IO005\":1,\"01IO016\":1}}")
 
-	fmt.Println(deckList.CardsInDeck)
+	library, error := populateCardLibrary()
 
-	for i := range deckList.CardsInDeck {
-		fmt.Println(i, deckList.CardsInDeck[i])
+	if error != nil {
+		fmt.Println("Library population failed with:", error)
 	}
 
-	populateCardLibrary()
+	for i := range deckList.CardsInDeck {
+		fmt.Println(library[i])
+	}
 
 	// // Code tested and working with actual client
 	// data, err := GetDeck()
@@ -58,8 +60,9 @@ func parseDeck(data string) deck {
 	return result
 }
 
-func populateCardLibrary() ([]card, error) {
-	var cards []card
+func populateCardLibrary() (map[string]card, error) {
+	var cardsArray []card
+	var cardsMap = make(map[string]card)
 
 	content, error := ioutil.ReadFile("en_us/data/set1-en_us.json")
 
@@ -68,12 +71,17 @@ func populateCardLibrary() ([]card, error) {
 		return nil, error
 	}
 
-	error = json.Unmarshal(content, &cards)
+	error = json.Unmarshal(content, &cardsArray)
 	if error != nil {
 		fmt.Println(error)
 	}
 
-	return cards, error
+	for i := range cardsArray {
+		cardID := cardsArray[i].CardCode
+		cardsMap[cardID] = cardsArray[i]
+	}
+
+	return cardsMap, error
 }
 
 // func findCardByID(string) (card, error) {
