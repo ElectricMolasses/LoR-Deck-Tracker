@@ -36,7 +36,10 @@ func main() {
 		fmt.Println(library[i])
 	}
 
+	initDeck(deckList)
+
 	getField()
+
 	// // Code tested and working with actual client
 	// data, err := GetDeck()
 
@@ -57,7 +60,6 @@ func parseDeck(data string) deck {
 
 	json.Unmarshal([]byte(data), &result)
 
-	fmt.Println(result)
 	return result
 }
 
