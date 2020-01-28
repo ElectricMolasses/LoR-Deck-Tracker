@@ -12,7 +12,7 @@ var port string = "21337"
 
 type deck struct {
 	DeckCode    string
-	CardsInDeck map[string]card
+	CardsInDeck map[string]int
 }
 
 type card struct {
@@ -26,10 +26,10 @@ func main() {
 	// Contains DeckCode and CardsInDeck
 	deckList := parseDeck("{\"DeckCode\":\"CEAAEBYBAEDRMGREFYZDKCABAABQMCYSCQNB2JYCAQAQABYMFIWAMAIBBEKCAIRHFE\",\"CardsInDeck\":{\"00IO004\":1,\"00IO015\":1,\"00IO008\":1,\"00IO006\":1,\"00IO010\":1,\"00IO014\":1,\"00IO012T2\":1,\"00IO005\":1,\"00IO016\":1}}")
 
-	fmt.Println(deckList["CardsInDeck"])
+	fmt.Println(deckList.CardsInDeck)
 	// parseDeck(data)
 
-	for i := range deckList["CardsInDeck"] {
+	for i := range deckList.CardsInDeck {
 		fmt.Println(i)
 	}
 }
@@ -57,19 +57,14 @@ func getDeck() (string, error) {
 	return data, err
 }
 
-func parseDeck(data string) map[string]interface{} {
+func parseDeck(data string) deck {
 	// var cards [40]Card // 40 is deck size.
-	var result interface{}
+	var result deck
 
 	json.Unmarshal([]byte(data), &result)
 
-	usable := result.(map[string]interface{})
-	cardsInDeck := usable["CardsInDeck"].(map[string]card)
-	fmt.Println(cardsInDeck)
-
-	usable["CardsInDeck"] = cardsInDeck
-
-	return usable
+	fmt.Println(result)
+	return result
 }
 
 /*
