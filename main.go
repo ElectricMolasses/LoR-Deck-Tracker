@@ -1,27 +1,33 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 )
 
 var localhost string = "http://localhost:"
-var port string = "21336"
+var port string = "21337"
 
-type Deck struct {
+type deck struct {
 	DeckCode    string
-	CardsInDeck []Card
+	CardsInDeck map[string]card
 }
 
-type Card struct {
+type card struct {
 	CardId   string
 	Quantity int
 }
 
 func main() {
-	data, _ := getDeck()
-	fmt.Println(data)
+	// data, _ := getDeck()
+	// fmt.Println(data)
+	// Contains DeckCode and CardsInDeck
+	deckList := parseDeck("{\"DeckCode\":\"CEAAEBYBAEDRMGREFYZDKCABAABQMCYSCQNB2JYCAQAQABYMFIWAMAIBBEKCAIRHFE\",\"CardsInDeck\":{\"00IO004\":1,\"00IO015\":1,\"00IO008\":1,\"00IO006\":1,\"00IO010\":1,\"00IO014\":1,\"00IO012T2\":1,\"00IO005\":1,\"00IO016\":1}}")
+
+	fmt.Println(deckList)
+	// parseDeck(data)
 }
 
 // GET http://localhost:{port}/static-decklist
@@ -47,8 +53,15 @@ func getDeck() (string, error) {
 	return data, err
 }
 
-func parseDeck(data string) {
+func parseDeck(data string) map[string]interface{} {
+	// var cards [40]Card // 40 is deck size.
+	var result interface{}
 
+	json.Unmarshal([]byte(data), &result)
+
+	usable := result.(map[string]interface{})
+
+	return usable
 }
 
 /*
