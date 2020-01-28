@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 )
 
 type deck struct {
@@ -17,7 +18,7 @@ type card struct {
 	Attack             int
 	Health             int
 	Cost               int
-	Keywords           string
+	Keywords           []string
 	SpellSpeed         string
 	Type               string
 }
@@ -30,6 +31,8 @@ func main() {
 	for i := range deckList.CardsInDeck {
 		fmt.Println(i, deckList.CardsInDeck[i])
 	}
+
+	populateCardLibrary()
 
 	// // Code tested and working with actual client
 	// data, err := GetDeck()
@@ -55,6 +58,24 @@ func parseDeck(data string) deck {
 	return result
 }
 
-// func populateCardLibrary() map[int]card {
+func populateCardLibrary() ([]card, error) {
+	var cards []card
+
+	content, error := ioutil.ReadFile("en_us/data/set1-en_us.json")
+
+	if error != nil {
+		fmt.Println("Library population failed with:", error)
+		return nil, error
+	}
+
+	error = json.Unmarshal(content, &cards)
+	if error != nil {
+		fmt.Println(error)
+	}
+
+	return cards, error
+}
+
+// func findCardByID(string) (card, error) {
 
 // }
