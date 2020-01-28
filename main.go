@@ -3,12 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"net/http"
 )
-
-var localhost string = "http://localhost:"
-var port string = "21337"
 
 type deck struct {
 	DeckCode    string
@@ -21,40 +16,26 @@ type card struct {
 }
 
 func main() {
-	// data, _ := getDeck()
-	// fmt.Println(data)
-	// Contains DeckCode and CardsInDeck
 	deckList := parseDeck("{\"DeckCode\":\"CEAAEBYBAEDRMGREFYZDKCABAABQMCYSCQNB2JYCAQAQABYMFIWAMAIBBEKCAIRHFE\",\"CardsInDeck\":{\"00IO004\":1,\"00IO015\":1,\"00IO008\":1,\"00IO006\":1,\"00IO010\":1,\"00IO014\":1,\"00IO012T2\":1,\"00IO005\":1,\"00IO016\":1}}")
 
 	fmt.Println(deckList.CardsInDeck)
-	// parseDeck(data)
 
 	for i := range deckList.CardsInDeck {
-		fmt.Println(i)
-	}
-}
-
-// GET http://localhost:{port}/static-decklist
-func queryClient(request string) (string, error) {
-	resp, err := http.Get(localhost + port + "/" + request)
-
-	if err != nil {
-		return "", err
+		fmt.Println(i, deckList.CardsInDeck[i])
 	}
 
-	data, err := ioutil.ReadAll(resp.Body)
+	// // Code tested and working with actual client
+	// data, err := GetDeck()
 
-	return string(data), err
-}
-
-func getDeck() (string, error) {
-	data, err := queryClient("static-decklist")
-
-	if err != nil {
-		return "", err
-	}
-
-	return data, err
+	// fmt.Println(data)
+	// fmt.Println(err)
+	// if err == nil {
+	// 	deck := parseDeck(data)
+	// 	fmt.Println(deck)
+	// 	for i := range deck.CardsInDeck {
+	// 		fmt.Println(i, deck.CardsInDeck[i])
+	// 	}
+	// }
 }
 
 func parseDeck(data string) deck {
