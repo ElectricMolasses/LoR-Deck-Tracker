@@ -11,8 +11,15 @@ type deck struct {
 }
 
 type card struct {
-	CardId   string
-	Quantity int
+	CardCode           string
+	Description        string
+	LevelUpDescription string
+	Attack             int
+	Health             int
+	Cost               int
+	Keywords           string
+	SpellSpeed         string
+	Type               string
 }
 
 func main() {
@@ -48,10 +55,6 @@ func parseDeck(data string) deck {
 	return result
 }
 
-/*
-{
-	"DeckCode":"CEAAEBYBAEDRMGREFYZDKCABAABQMCYSCQNB2JYCAQAQABYMFIWAMAIBBEKCAIRHFE",
-	"CardsInDeck":
-		{"00IO004":1,"00IO015":1,"00IO008":1,"00IO006":1,"00IO010":1,"00IO014":1,"00IO012T2":1,"00IO005":1,"00IO016":1}
-}
-*/
+// func populateCardLibrary() map[int]card {
+
+// }
