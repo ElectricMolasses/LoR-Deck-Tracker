@@ -26,8 +26,12 @@ func main() {
 	// Contains DeckCode and CardsInDeck
 	deckList := parseDeck("{\"DeckCode\":\"CEAAEBYBAEDRMGREFYZDKCABAABQMCYSCQNB2JYCAQAQABYMFIWAMAIBBEKCAIRHFE\",\"CardsInDeck\":{\"00IO004\":1,\"00IO015\":1,\"00IO008\":1,\"00IO006\":1,\"00IO010\":1,\"00IO014\":1,\"00IO012T2\":1,\"00IO005\":1,\"00IO016\":1}}")
 
-	fmt.Println(deckList)
+	fmt.Println(deckList["CardsInDeck"])
 	// parseDeck(data)
+
+	for i := range deckList["CardsInDeck"] {
+		fmt.Println(i)
+	}
 }
 
 // GET http://localhost:{port}/static-decklist
@@ -60,6 +64,10 @@ func parseDeck(data string) map[string]interface{} {
 	json.Unmarshal([]byte(data), &result)
 
 	usable := result.(map[string]interface{})
+	cardsInDeck := usable["CardsInDeck"].(map[string]card)
+	fmt.Println(cardsInDeck)
+
+	usable["CardsInDeck"] = cardsInDeck
 
 	return usable
 }
