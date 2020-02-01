@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"time"
 )
 
 type deck struct {
@@ -24,6 +25,7 @@ type card struct {
 }
 
 func main() {
+	// Test against static data before testing against client.
 	deckList := parseDeck("{\"DeckCode\":\"CEAAEBYBAEDRMGREFYZDKCABAABQMCYSCQNB2JYCAQAQABYMFIWAMAIBBEKCAIRHFE\",\"CardsInDeck\":{\"01IO004\":1,\"01IO015\":1,\"01IO008\":1,\"01IO006\":1,\"01IO010\":1,\"01IO014\":1,\"01IO012T2\":1,\"01IO005\":1,\"01IO016\":1}}")
 
 	library, error := populateCardLibrary()
@@ -38,8 +40,6 @@ func main() {
 
 	initDeck(deckList)
 
-	getField()
-
 	// // Code tested and working with actual client
 	// data, err := GetDeck()
 
@@ -52,6 +52,15 @@ func main() {
 	// 		fmt.Println(i, deck.CardsInDeck[i])
 	// 	}
 	// }
+
+	// Loop to continue checking board state
+	// Entire app refreshes on ticker time.
+	timedLoop := time.NewTicker(time.Second)
+	for {
+		<-timedLoop.C
+
+		getBoard()
+	}
 }
 
 func parseDeck(data string) deck {
@@ -67,16 +76,16 @@ func populateCardLibrary() (map[string]card, error) {
 	var cardsArray []card
 	var cardsMap = make(map[string]card)
 
-	content, error := ioutil.ReadFile("en_us/data/set1-en_us.json")
+	content, err := ioutil.ReadFile("en_us/data/set1-en_us.json")
 
-	if error != nil {
-		fmt.Println("Library population failed with:", error)
-		return nil, error
+	if err != nil {
+		fmt.Println("Library population failed with:", err)
+		return nil, err
 	}
 
-	error = json.Unmarshal(content, &cardsArray)
-	if error != nil {
-		fmt.Println(error)
+	err = json.Unmarshal(content, &cardsArray)
+	if err != nil {
+		fmt.Println(err)
 	}
 
 	for i := range cardsArray {
@@ -84,5 +93,5 @@ func populateCardLibrary() (map[string]card, error) {
 		cardsMap[cardID] = cardsArray[i]
 	}
 
-	return cardsMap, error
+	return cardsMap, err
 }

@@ -1,13 +1,21 @@
 package main
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 type board struct {
 	PlayerName   string
 	OpponentName string
 	GameState    string
-	// Screen Object
-	Rectangles []fieldCard
+	Screen       screen
+	Rectangles   []fieldCard
+}
+
+type screen struct {
+	ScreenWidth  int
+	ScreenHeight int
 }
 
 type fieldCard struct {
@@ -29,9 +37,20 @@ var playerField []int
 
 var opponentField []int
 
-func getField() {
+func getBoard() (board, error) {
 	data, err := queryClient("positional-rectangles")
-	fmt.Println(data, err)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(data)
+	var fieldCards board
+	err = json.Unmarshal([]byte(data), &fieldCards)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(fieldCards)
+
+	return fieldCards, err
 }
 
 func initDeck(deck deck) {
