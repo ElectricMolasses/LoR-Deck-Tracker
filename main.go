@@ -41,18 +41,18 @@ func main() {
 
 	initDeck(deckList)
 
-	// // Code tested and working with actual client
-	// data, err := GetDeck()
+	// Live Connection Code
+	data, err := getDeck()
 
-	// fmt.Println(data)
-	// fmt.Println(err)
-	// if err == nil {
-	// 	deck := parseDeck(data)
-	// 	fmt.Println(deck)
-	// 	for i := range deck.CardsInDeck {
-	// 		fmt.Println(i, deck.CardsInDeck[i])
-	// 	}
-	// }
+	fmt.Println(data)
+	fmt.Println(err)
+	if err == nil {
+		deck := parseDeck(data)
+		fmt.Println(deck)
+		for i := range deck.CardsInDeck {
+			fmt.Println(i, deck.CardsInDeck[i])
+		}
+	}
 
 	// Loop to continue checking board state
 	// Entire app refreshes on ticker time.
@@ -62,6 +62,8 @@ func main() {
 		<-timedLoop.C
 
 		getBoard()
+		// Will need an event on the UI that tells
+		// the application to close.
 	}
 }
 

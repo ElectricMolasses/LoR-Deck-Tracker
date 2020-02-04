@@ -33,24 +33,26 @@ var playerDeck deck
 // The same will go for the field, but they'll contain
 // maps that contain cards, to track board position, etc.
 var playerDiscard []card
-var player []int
+var player []fieldCard
 
-var opponent []int
+var opponent []fieldCard
 
 func getBoard() (board, error) {
 	data, err := queryClient("positional-rectangles")
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(data)
-	var fieldCards board
-	err = json.Unmarshal([]byte(data), &fieldCards)
+
+	var currentBoard board
+	err = json.Unmarshal([]byte(data), &currentBoard)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(fieldCards)
 
-	return fieldCards, err
+	playerCards := getPlayerCards(currentBoard.Rectangles)
+	fmt.Println(playerCards)
+
+	return currentBoard, err
 }
 
 func initDeck(deck deck) {
@@ -66,6 +68,17 @@ func boardChanges(oldBoard, newBoard board) ([]card, []card) {
 	var removedCards []card
 
 	return newCards, removedCards
+}
+
+func getPlayerCards(fieldCards []fieldCard) []fieldCard {
+	var playerCards []fieldCard
+	for i := range fieldCards {
+		if fieldCards[i].LocalPlayer {
+			playerCards = append(playerCards, fieldCards[i])
+		}
+	}
+
+	return playerCards
 }
 
 func handleRemovedCard(removedCard card) {
