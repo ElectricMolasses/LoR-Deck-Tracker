@@ -14,6 +14,7 @@ type deck struct {
 
 type card struct {
 	CardCode           string
+	Name               string
 	Description        string
 	LevelUpDescription string
 	Attack             int
@@ -35,7 +36,7 @@ func main() {
 	}
 
 	for i := range deckList.CardsInDeck {
-		fmt.Println(library[i])
+		fmt.Println(i, library[i])
 	}
 
 	initDeck(deckList)
@@ -57,6 +58,7 @@ func main() {
 	// Entire app refreshes on ticker time.
 	timedLoop := time.NewTicker(time.Second)
 	for {
+		// Await ticker delay and then continue.
 		<-timedLoop.C
 
 		getBoard()

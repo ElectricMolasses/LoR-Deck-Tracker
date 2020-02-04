@@ -33,9 +33,9 @@ var playerDeck deck
 // The same will go for the field, but they'll contain
 // maps that contain cards, to track board position, etc.
 var playerDiscard []card
-var playerField []int
+var player []int
 
-var opponentField []int
+var opponent []int
 
 func getBoard() (board, error) {
 	data, err := queryClient("positional-rectangles")
@@ -55,4 +55,26 @@ func getBoard() (board, error) {
 
 func initDeck(deck deck) {
 	playerDeck = deck
+}
+
+// Will return an array of all cards that were not
+// on the board or handalready, and then an array of all
+// cards that were on the board or hand, but have since been
+// removed.
+func boardChanges(oldBoard, newBoard board) ([]card, []card) {
+	var newCards []card
+	var removedCards []card
+
+	return newCards, removedCards
+}
+
+func handleRemovedCard(removedCard card) {
+
+}
+
+func handleAddedCard(newCard fieldCard) {
+	if newCard.LocalPlayer {
+		playerDeck.CardsInDeck[newCard.Card.CardCode]--
+		fmt.Println("You played:", newCard.Card.Name)
+	}
 }
