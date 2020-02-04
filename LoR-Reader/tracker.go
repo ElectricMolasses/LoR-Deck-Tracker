@@ -56,3 +56,7 @@ func getBoard() (board, error) {
 func initDeck(deck deck) {
 	playerDeck = deck
 }
+
+func processFieldChange(board board) {
+
+}
