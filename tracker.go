@@ -69,7 +69,9 @@ func boardChanges(oldBoard, newBoard board) ([]card, []card) {
 }
 
 func handleRemovedCard(removedCard card) {
-
+	// Mostly just removes from field for extra functionality later.
+	// Immediate functionality required will be parsing card description
+	// in case the card adds or returns something to the players library.
 }
 
 func handleAddedCard(newCard fieldCard) {
